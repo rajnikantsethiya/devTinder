@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-const jwt  = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../utils/const');
 
 const userSchema = new mongoose.Schema({
@@ -16,11 +16,20 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    age: { 
+    bio: {
+        type: String,
+        trim: true
+    },
+    photoUrl: {
+        type: String,
+        trim: true,
+        default: 'https://cdn.vectorstock.com/i/1000v/92/16/default-profile-picture-avatar-user-icon-vector-46389216.jpg'
+    },
+    age: {
         type: Number,
         min: 18
-     },
-    emailId: { 
+    },
+    emailId: {
         type: String,
         required: true,
         unique: true,
@@ -30,27 +39,28 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Please enter a valid email id.');
             }
         }
-     },
-     password: {
+    },
+    password: {
         type: String,
         required: true,
         trim: true
-     },
-    gender: { 
+    },
+    gender: {
         type: String,
         validate: (value) => {
             if (!['male', 'female', 'others'].includes(value)) {
                 throw new Error('gender data is not allowed');
             }
-        }
-     },
-     skills: {
+        },
+        required: true
+    },
+    skills: {
         type: [String],
-     }
+    }
 },
-{
-    timestamps: true
-});
+    {
+        timestamps: true
+    });
 
 // Shcema methods, which can be accessed on any instance of this model.
 userSchema.methods.getPasswordHashed = async function (password) {
@@ -59,7 +69,7 @@ userSchema.methods.getPasswordHashed = async function (password) {
 };
 userSchema.methods.getJwt = function (expireTime) {
     const user = this;
-    const token  = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: expireTime || '1d'});
+    const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: expireTime || '1d' });
     return token;
 }
 

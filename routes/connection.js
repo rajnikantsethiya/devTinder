@@ -16,18 +16,23 @@ router.post("/connection/send/:status/:userId", userAuth, async (req, res) => {
         const { userId, status } = req.params;
         const allowedStatues = ['interested', 'ignored'];
         if (!allowedStatues.includes(status.toLowerCase())) {
-            return res.status(400).send({
-                message: `Invalid status type: ${status}`
+            return res.status(200).send({
+                message: `Invalid status type: ${status}`,
+                code: 400
             });
         };
 
         const toUser = await User.findById(userId);
         if (!toUser) {
-            return res.status(400).send('No user found!');
+            return res.status(200).json({
+                message: 'No user found!',
+                code: 400
+            });
         }
         if (toUser._id === currentUser._id) {
-            return res.status(400).send({
-                message: "You can't send request to yourself!"
+            return res.status(200).send({
+                message: "You can't send request to yourself!",
+                code: 400
             });
         }
         const requestExists = await ConnectionRequest.findOne({
@@ -38,8 +43,9 @@ router.post("/connection/send/:status/:userId", userAuth, async (req, res) => {
         console.log(requestExists);
 
         if (requestExists) {
-            return res.status(400).send({
-                message: "You have already sent a request!"
+            return res.status(200).send({
+                message: "You have already sent a request!",
+                code: 400
             })
         } else {
             const request = new ConnectionRequest({
@@ -49,10 +55,13 @@ router.post("/connection/send/:status/:userId", userAuth, async (req, res) => {
             })
             await request.save();
             return res.status(200).send({
-                message: "Your connection request sent successfully!"
+                message: "Your connection request sent successfully!",
+                code: 200
             })
         }
     } catch (err) {
+        console.log(err);
+
         res.status(400).send(err.message);
     }
 });
@@ -70,13 +79,14 @@ router.post("/connection/review/:status/:requestId", userAuth, async (req, res) 
             status: 'interested',
             toUserId: currentUser._id
         });
+
         if (!request) {
             return res.status(200).send({ message: "No request found!" });
         };
 
         request.status = 'accepted';
         request.save();
-        return res.status(200).send({ message: 'Your request is accepted!' })
+        return res.status(200).send({ message: 'Your request is accepted!', code: 200 });
     } catch (e) {
         return res.status(400).send(e.message);
     }

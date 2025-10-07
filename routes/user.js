@@ -52,7 +52,10 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
                 { fromUserId: currentUser._id, status: 'accepted' }
             ]
         }).populate('fromUserId', USER_SAFE_DATA);
-        return res.status(200).json(connections);
+        if (!connections.length) {
+            return res.status(200).json({ message: 'No connections found!', data: [] });
+        };
+        return res.status(200).json({ message: '', data: connections });
     }
     catch (e) {
         return res.status(400).json(e.message)
@@ -64,13 +67,13 @@ userRouter.get('/user/requests', userAuth, async (req, res) => {
         const currentUser = req.user;
         const requests = await ConnectionRequest.find({
             status: 'interested',
-            fromUserId: currentUser._id
-        }).populate('toUserId', USER_SAFE_DATA);
+            toUserId: currentUser._id
+        }).populate('fromUserId', USER_SAFE_DATA);
 
         if (!requests.length) {
-            return res.status(200).json({ message: 'No requests found!' })
+            return res.status(200).json({ message: 'No requests found!', data: [] });
         };
-        return res.status(200).json(requests);
+        return res.status(200).json({ message: '', data: requests });
     }
     catch (e) {
         res.status(400).json(e.message);

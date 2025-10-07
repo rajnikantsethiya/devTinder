@@ -10,7 +10,7 @@ profileRouter.get('/profile/get', userAuth, async (req, res) => {
         const user = req.user;
         return res.status(200).send(user);
     } catch (err) {
-        return res.status(400).send(err.message);
+        return res.status(401).send(err.message);
     }
 });
 
@@ -23,7 +23,7 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
                 loggedInUser[key] = req.body[key]
             );
             await loggedInUser.save();
-            return res.status(200).send(`Hi ${loggedInUser.firstName}, Your profile is updated!`)
+            return res.status(200).json({ message: `Hi ${loggedInUser.firstName}, Your profile is updated!` })
         } else {
             throw new Error('Required updates are not allowed!')
         }
