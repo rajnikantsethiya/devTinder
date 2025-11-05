@@ -5,7 +5,7 @@ const { validateUpdatedData } = require('../utils/validate');
 const profileRouter = express.Router();
 
 // get a single user
-profileRouter.get('/profile/get', userAuth, async (req, res) => {
+profileRouter.get('/get', userAuth, async (req, res) => {
     try {
         const user = req.user;
         return res.status(200).send(user);
@@ -14,7 +14,7 @@ profileRouter.get('/profile/get', userAuth, async (req, res) => {
     }
 });
 
-profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
+profileRouter.patch('/edit', userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
         const isAllowed = validateUpdatedData(req);

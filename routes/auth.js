@@ -6,7 +6,7 @@ const { userAuth } = require('../utils/middleware');
 
 const authRouter = express.Router();
 
-authRouter.post("/auth/signup", async (req, res) => {
+authRouter.post("/signup", async (req, res) => {
     try {
         const validatedData = validateSignup(req);
         const { firstName, lastName, emailId, password, gender } = req.body;
@@ -40,7 +40,7 @@ authRouter.post("/auth/signup", async (req, res) => {
     }
 });
 
-authRouter.post('/auth/login', async (req, res) => {
+authRouter.post('/login', async (req, res) => {
     try {
         const { emailId, password } = req.body;
         const user = await User.findOne({ emailId });
@@ -61,7 +61,7 @@ authRouter.post('/auth/login', async (req, res) => {
     }
 });
 
-authRouter.post('/auth/logout', userAuth, async (req, res) => {
+authRouter.post('/logout', userAuth, async (req, res) => {
     try {
         res.cookie('token', null, {
             expires: new Date(Date.now())
@@ -75,7 +75,7 @@ authRouter.post('/auth/logout', userAuth, async (req, res) => {
     }
 });
 
-authRouter.patch('/auth/forgotPassword', async (req, res) => {
+authRouter.patch('/forgotPassword', async (req, res) => {
     try {
         const { emailId, password, newPassword } = req.body;
         const user = await User.findOne({ emailId });

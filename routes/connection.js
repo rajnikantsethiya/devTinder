@@ -10,7 +10,7 @@ const router = express.Router();
 // can't request to yourself
 // Request sent/ignored successfully
 // can't send request to random id
-router.post("/connection/send/:status/:userId", userAuth, async (req, res) => {
+router.post("/send/:status/:userId", userAuth, async (req, res) => {
     try {
         const currentUser = req.user;
         const { userId, status } = req.params;
@@ -66,7 +66,7 @@ router.post("/connection/send/:status/:userId", userAuth, async (req, res) => {
     }
 });
 
-router.post("/connection/review/:status/:requestId", userAuth, async (req, res) => {
+router.post("/review/:status/:requestId", userAuth, async (req, res) => {
     try {
         const allowedStatus = ['accepted', 'rejected'];
         const { status, requestId } = req.params;

@@ -9,7 +9,7 @@ const { USER_SAFE_DATA } = require('../utils/const');
 const userRouter = express.Router();
 
 // Delete user
-userRouter.delete('/user/delete', async (req, res) => {
+userRouter.delete('/delete', async (req, res) => {
     try {
         const user = await User.findOneAndDelete({ emailId: req.body.emailId });
         if (!user || user?.length === 0) {
@@ -22,7 +22,7 @@ userRouter.delete('/user/delete', async (req, res) => {
 });
 
 // Update user
-userRouter.patch('/user/update/:userId', async (req, res) => {
+userRouter.patch('/update/:userId', async (req, res) => {
     const userId = req.params.userId;
 
     try {
@@ -43,7 +43,7 @@ userRouter.patch('/user/update/:userId', async (req, res) => {
 
 // connections -> 
 // get all connection where status is accepted
-userRouter.get('/user/connections', userAuth, async (req, res) => {
+userRouter.get('/connections', userAuth, async (req, res) => {
     try {
         const currentUser = req.user;
         const connections = await ConnectionRequest.find({
@@ -62,7 +62,7 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
     }
 });
 
-userRouter.get('/user/requests', userAuth, async (req, res) => {
+userRouter.get('/requests', userAuth, async (req, res) => {
     try {
         const currentUser = req.user;
         const requests = await ConnectionRequest.find({

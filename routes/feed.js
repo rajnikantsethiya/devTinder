@@ -5,7 +5,7 @@ const ConnectionRequest = require('../models/connectionRequest');
 const { userAuth } = require('../utils/middleware');
 const { USER_SAFE_DATA } = require('../utils/const');
 
-router.get('/feed', userAuth, async (req, res) => {
+router.get('/', userAuth, async (req, res) => {
   const currentUser = req.user;
   const page = parseInt(req.query.page) || 1;
   let limit = 10;

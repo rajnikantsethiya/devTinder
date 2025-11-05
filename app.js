@@ -16,11 +16,14 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
-app.use('/', authRouter);
-app.use('/', profileRouter);
-app.use('/', userRouter);
-app.use('/', connectionRouter);
-app.use('/', feedRouter);
+app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
+app.use('/user', userRouter);
+app.use('/connection', connectionRouter);
+app.use('/feed', feedRouter);
+app.get('/', async (req, res) => {
+    res.send('Hello world');
+});
 
 connectDB().then(() => {
     console.log("Database connection is established");
